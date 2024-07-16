@@ -1,11 +1,13 @@
 package com.parking_spot_control.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
+
 
 
 @AllArgsConstructor
@@ -22,9 +24,10 @@ public class Resident implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private String cpf;
-    private Date birthdate;
+    @Column(nullable = false)
     private String apartment;
-
 }
