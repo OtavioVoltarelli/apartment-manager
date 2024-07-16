@@ -1,22 +1,17 @@
 package com.parking_spot_control.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDate;
 
 
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
 @EqualsAndHashCode
 @Entity
-@Table(name = "tb_resident")
 public class Resident implements Serializable {
     @Serial
     private static final long serialVersionUID = 1;
@@ -26,8 +21,40 @@ public class Resident implements Serializable {
     private Long id;
     @Column(nullable = false)
     private String name;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String cpf;
     @Column(nullable = false)
     private String apartment;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public String getApartment() {
+        return apartment;
+    }
+
+    public void setApartment(String apartment) {
+        this.apartment = apartment;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

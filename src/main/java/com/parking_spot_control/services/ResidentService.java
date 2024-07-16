@@ -6,6 +6,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class ResidentService {
 
@@ -13,7 +16,20 @@ public class ResidentService {
     ResidentRepository residentRepository;
 
     @Transactional
-    public Object save(Resident resident) {
+    public Object addResident(Resident resident) {
         return residentRepository.save(resident);
+    }
+
+    public List<Resident> findAll() {
+        return residentRepository.findAll();
+    }
+
+    public Optional<Resident> findById(Long id) {
+        return residentRepository.findById(id);
+    }
+
+    @Transactional
+    public void deleteResident(Resident resident) {
+        residentRepository.delete(resident);
     }
 }
