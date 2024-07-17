@@ -15,8 +15,9 @@ public class ResidentService {
     @Autowired
     ResidentRepository residentRepository;
 
+
     @Transactional
-    public Object addResident(Resident resident) {
+    public Object add(Resident resident) {
         return residentRepository.save(resident);
     }
 
@@ -29,7 +30,7 @@ public class ResidentService {
     }
 
     @Transactional
-    public void deleteResident(Resident resident) {
+    public void delete(Resident resident) {
         residentRepository.delete(resident);
     }
 }

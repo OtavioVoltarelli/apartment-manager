@@ -22,10 +22,10 @@ public class ResidentController {
 
 
     @PostMapping
-    public ResponseEntity<Object> addResident(@RequestBody @Valid ResidentDto residentDto) {
+    public ResponseEntity<Object> add(@RequestBody @Valid ResidentDto residentDto) {
         var resident = new Resident();
         BeanUtils.copyProperties(residentDto, resident);
-        return ResponseEntity.status(HttpStatus.CREATED).body(residentService.addResident(resident));
+        return ResponseEntity.status(HttpStatus.CREATED).body(residentService.add(resident));
     }
 
     @GetMapping
@@ -43,7 +43,7 @@ public class ResidentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> attResident(@PathVariable(value = "id") Long id, @RequestBody @Valid ResidentDto residentDto) {
+    public ResponseEntity<Object> update(@PathVariable(value = "id") Long id, @RequestBody @Valid ResidentDto residentDto) {
         Optional<Resident> residentOptional = residentService.findById(id);
         if(residentOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Resident not found");
@@ -51,16 +51,16 @@ public class ResidentController {
         var resident = new Resident();
         BeanUtils.copyProperties(residentDto, resident);
         resident.setId(residentOptional.get().getId());
-        return ResponseEntity.status(HttpStatus.OK).body(residentService.addResident(resident));
+        return ResponseEntity.status(HttpStatus.OK).body(residentService.add(resident));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteResident(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<Object> delete(@PathVariable(value = "id") Long id) {
         Optional<Resident> residentOptional = residentService.findById(id);
         if(residentOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Resident not found");
         }
-        residentService.deleteResident(residentOptional.get());
+        residentService.delete(residentOptional.get());
         return ResponseEntity.status(HttpStatus.OK).body("Resident deleted");
     }
 }
