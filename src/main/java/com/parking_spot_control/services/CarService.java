@@ -1,7 +1,6 @@
 package com.parking_spot_control.services;
 
 import com.parking_spot_control.domain.Car;
-import com.parking_spot_control.domain.Resident;
 import com.parking_spot_control.repositories.CarRepository;
 import com.parking_spot_control.repositories.ResidentRepository;
 import jakarta.transaction.Transactional;
@@ -36,5 +35,9 @@ public class CarService {
     @Transactional
     public void delete(Car car) {
         carRepository.delete(car);
+    }
+
+    public Optional<Car> findByLicensePlate(String licensePlate) {
+        return carRepository.findByLicensePlate(licensePlate);
     }
 }

@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 
 public class CarDto {
 
+    private Long id;
     @NotBlank
     private String model;
     @NotBlank
@@ -15,6 +16,15 @@ public class CarDto {
     private String licensePlate;
     @NotNull
     private Long ownerID;
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public @NotBlank String getModel() {
         return model;

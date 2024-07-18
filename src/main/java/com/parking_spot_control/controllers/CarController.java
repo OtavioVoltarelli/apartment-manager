@@ -26,6 +26,7 @@ public class CarController {
     @Autowired
     ResidentService residentService;
 
+    @Transactional
     @PostMapping
     public ResponseEntity<Object> add(@RequestBody @Valid CarDto carDto) {
         var car = new Car();
@@ -43,7 +44,7 @@ public class CarController {
         if(carOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Car not found");
         }
-        return ResponseEntity.status(HttpStatus.OK).body(carOptional.get());
+        return ResponseEntity.status(HttpStatus.OK).body(carOptional);
     }
 
     @GetMapping
@@ -51,7 +52,7 @@ public class CarController {
         return ResponseEntity.status(HttpStatus.OK).body(carService.findAll());
     }
 
-    @PutMapping("/{id}")
+    @PutMapping
     @Transactional
     public ResponseEntity<Object> update(@PathVariable(value = "id") Long id, @RequestBody @Valid CarDto carDto) {
         Optional<Car> carOptional = carService.findById(id);
@@ -63,7 +64,7 @@ public class CarController {
         car.setId(carOptional.get().getId());
         return ResponseEntity.status(HttpStatus.OK).body(carService.add(car));
     }
-
+    @Transactional
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable(value = "id") Long id) {
         Optional<Car> carOptional = carService.findById(id);

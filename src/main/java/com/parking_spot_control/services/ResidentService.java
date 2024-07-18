@@ -28,6 +28,9 @@ public class ResidentService {
     public Optional<Resident> findById(Long id) {
         return residentRepository.findById(id);
     }
+    public Optional<Resident> findByCpf(String cpf) {
+        return residentRepository.findByCpf(cpf);
+    }
 
     @Transactional
     public void delete(Resident resident) {

@@ -3,9 +3,7 @@ package com.parking_spot_control.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -33,6 +31,7 @@ public class Car implements Serializable {
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private Resident ownerId;
+
 
     public Long getId() {
         return id;
@@ -70,7 +69,7 @@ public class Car implements Serializable {
         return ownerId;
     }
 
-    public void setOwnerId(Resident owner) {
-        this.ownerId = owner;
+    public void setOwnerId(Resident ownerId) {
+        this.ownerId = ownerId;
     }
 }

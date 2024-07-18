@@ -25,19 +25,21 @@ public class Resident implements Serializable {
     private String name;
     @Column(nullable = false, unique = true)
     private String cpf;
-    @Column(nullable = false)
-    private String apartment;
-
 
     @OneToMany(mappedBy = "ownerId")
     private List<Car> cars;
 
-    public String getName() {
-        return name;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "apartment_id")
+    private Apartment apartment;
+
+    public Long getId() {
+        return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getCpf() {
@@ -48,20 +50,20 @@ public class Resident implements Serializable {
         this.cpf = cpf;
     }
 
-    public String getApartment() {
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Apartment getApartment() {
         return apartment;
     }
 
-    public void setApartment(String apartment) {
+    public void setApartment(Apartment apartment) {
         this.apartment = apartment;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public List<Car> getCars() {

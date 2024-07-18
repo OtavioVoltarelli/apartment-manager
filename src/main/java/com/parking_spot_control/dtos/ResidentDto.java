@@ -1,17 +1,27 @@
 package com.parking_spot_control.dtos;
 
 import jakarta.validation.constraints.NotBlank;
-
+import jakarta.validation.constraints.NotNull;
 
 
 public class ResidentDto {
 
+    private Long id;
     @NotBlank
     private String name;
     @NotBlank
     private String cpf;
-    @NotBlank
-    private String apartment;
+    @NotNull
+    private Long apartmentNumber;
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public @NotBlank String getName() {
         return name;
@@ -29,12 +39,12 @@ public class ResidentDto {
         this.cpf = cpf;
     }
 
-    public @NotBlank String getApartment() {
-        return apartment;
+    public @NotNull Long getApartmentNumber() {
+        return apartmentNumber;
     }
 
-    public void setApartment(@NotBlank String apartment) {
-        this.apartment = apartment;
+    public void setApartmentNumber(@NotNull Long apartmentNumber) {
+        this.apartmentNumber = apartmentNumber;
     }
 }
 
