@@ -1,4 +1,4 @@
-package com.parking_spot_control.dtos;
+package com.apartment_manager.dtos;
 
 import jakarta.validation.constraints.NotNull;
 

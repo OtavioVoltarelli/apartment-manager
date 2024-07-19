@@ -1,6 +1,6 @@
-package com.parking_spot_control.repositories;
+package com.apartment_manager.repositories;
 
-import com.parking_spot_control.domain.Car;
+import com.apartment_manager.domain.Car;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

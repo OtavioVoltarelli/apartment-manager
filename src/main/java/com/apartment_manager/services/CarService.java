@@ -1,8 +1,8 @@
-package com.parking_spot_control.services;
+package com.apartment_manager.services;
 
-import com.parking_spot_control.domain.Car;
-import com.parking_spot_control.repositories.CarRepository;
-import com.parking_spot_control.repositories.ResidentRepository;
+import com.apartment_manager.domain.Car;
+import com.apartment_manager.repositories.CarRepository;
+import com.apartment_manager.repositories.ResidentRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

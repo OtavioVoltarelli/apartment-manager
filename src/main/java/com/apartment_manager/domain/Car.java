@@ -1,4 +1,4 @@
-package com.parking_spot_control.domain;
+package com.apartment_manager.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -26,6 +26,8 @@ public class Car implements Serializable {
     private String color;
     @Column(nullable = false, unique = true)
     private String licensePlate;
+    @Column(nullable = false)
+    private boolean activated;
 
     @JsonIgnore
     @ManyToOne
@@ -71,5 +73,13 @@ public class Car implements Serializable {
 
     public void setOwnerId(Resident ownerId) {
         this.ownerId = ownerId;
+    }
+
+    public boolean isActivated() {
+        return activated;
+    }
+
+    public void setActivated(boolean activated) {
+        this.activated = activated;
     }
 }

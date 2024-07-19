@@ -1,7 +1,5 @@
-package com.parking_spot_control.dtos;
+package com.apartment_manager.dtos;
 
-import com.parking_spot_control.domain.Resident;
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -14,7 +12,6 @@ public class CarDto {
     private String color;
     @NotBlank
     private String licensePlate;
-    @NotNull
     private Long ownerID;
 
 
@@ -51,11 +48,11 @@ public class CarDto {
     }
 
 
-    public @NotNull Long getOwnerID() {
+    public Long getOwnerID() {
         return ownerID;
     }
 
-    public void setOwnerID(@NotNull Long ownerID) {
+    public void setOwnerID(Long ownerID) {
         this.ownerID = ownerID;
     }
 }

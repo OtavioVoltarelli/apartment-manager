@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.parking-spot-control</groupId>
-	<artifactId>parking-spot-control</artifactId>
+	<artifactId>apartment-manager</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>parking-spot-control</name>
 	<description>Projeto para gerenciamento de vagas de um condomínio</description>

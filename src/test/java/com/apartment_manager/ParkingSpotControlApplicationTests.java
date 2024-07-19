@@ -1,4 +1,4 @@
-package com.parking_spot_control;
+package com.apartment_manager;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

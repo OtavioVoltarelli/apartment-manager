@@ -1,4 +1,4 @@
-package com.parking_spot_control.domain;
+package com.apartment_manager.domain;
 
 
 import jakarta.persistence.*;
@@ -6,9 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 @NoArgsConstructor
@@ -23,6 +21,9 @@ public class Apartment {
     private Long id;
     @Column(nullable = false)
     private Long number;
+
+    @Column(nullable = false)
+    private boolean vacant;
 
     @OneToMany(mappedBy = "apartment")
     private List<Resident> residents;
@@ -46,5 +47,13 @@ public class Apartment {
 
     public List<Resident> getResidents() {
         return residents;
+    }
+
+    public boolean isVacant() {
+        return vacant;
+    }
+
+    public void setVacant(boolean vacant) {
+        this.vacant = vacant;
     }
 }

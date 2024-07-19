@@ -1,4 +1,4 @@
-package com.parking_spot_control.domain;
+package com.apartment_manager.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -25,6 +25,8 @@ public class Resident implements Serializable {
     private String name;
     @Column(nullable = false, unique = true)
     private String cpf;
+    @Column(nullable = false)
+    private boolean activated;
 
     @OneToMany(mappedBy = "ownerId")
     private List<Car> cars;
@@ -68,5 +70,13 @@ public class Resident implements Serializable {
 
     public List<Car> getCars() {
         return cars;
+    }
+
+    public boolean isActivated() {
+        return activated;
+    }
+
+    public void setActivated(boolean activated) {
+        this.activated = activated;
     }
 }
