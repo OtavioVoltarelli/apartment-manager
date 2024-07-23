@@ -53,4 +53,12 @@ public class ApartmentController {
         apartment.setId(apartmentDto.getId());
         return ResponseEntity.status(HttpStatus.OK).body(apartmentService.add(apartment));
     }
+
+    @Transactional
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteApartment(@PathVariable(value = "id")Long id) {
+        Apartment apartment = apartmentService.findById(id);
+        apartmentService.delete(apartment);
+        return ResponseEntity.status(HttpStatus.OK).body("Apartment removed!");
+    }
 }
