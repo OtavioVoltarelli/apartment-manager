@@ -8,7 +8,6 @@ import com.apartment_manager.services.CarService;
 import com.apartment_manager.services.ResidentService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +30,8 @@ public class CarController {
     @PostMapping
     public ResponseEntity<Object> add(@RequestBody @Valid CarDto carDto) {
         var car = new Car();
-        Optional<Resident> ownerOptional = residentService.findById(carDto.getOwnerID());
-        ownerOptional.ifPresent(car::setOwnerId);
+        Resident owner = residentService.findById(carDto.getOwnerID());
+        car.setOwnerId(owner);
         car.setModel(carDto.getModel());
         car.setColor(carDto.getColor());
         car.setLicensePlate(carDto.getLicensePlate());
@@ -41,12 +40,9 @@ public class CarController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> findById (@PathVariable(value = "id") Long id) {
-        Optional<Car> carOptional = carService.findById(id);
-        if(carOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Car not found");
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(carOptional);
+    public ResponseEntity<Car> findById (@PathVariable(value = "id") Long id) {
+        Car car = carService.findById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(car);
     }
 
     @GetMapping
@@ -57,20 +53,13 @@ public class CarController {
     @PutMapping
     @Transactional
     public ResponseEntity<Object> update(@RequestBody @Valid CarDto carDto) {
-        Optional<Car> carOptional = carService.findById(carDto.getId());
-        if(carOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Car not found");
-        }
-        Car car = carOptional.get();
+        Car car = carService.findById(carDto.getId());
         car.setModel(carDto.getModel());
         car.setColor(carDto.getColor());
         car.setLicensePlate(carDto.getLicensePlate());
         if(carDto.getOwnerID() != null) {
-            Optional<Resident> residentOptional = residentService.findById(carDto.getOwnerID());
-            if(residentOptional.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Resident not found");
-            }
-            car.setOwnerId(residentOptional.get());
+            Resident resident = residentService.findById(carDto.getOwnerID());
+            car.setOwnerId(resident);
         }
         return ResponseEntity.status(HttpStatus.OK).body(carService.add(car));
     }
@@ -78,11 +67,7 @@ public class CarController {
     @Transactional
     @DeleteMapping("/remove-all-cars")
     public ResponseEntity<Object> deleteAllCarsFromResidents (@RequestBody @Valid CarRemovalDto carRemovalDto) {
-        Optional<Resident> residentOptional = residentService.findByCpf(carRemovalDto.getCpf());
-        if (residentOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Resident not found");
-        }
-        Resident resident = residentOptional.get();
+        Resident resident = residentService.findByCpf(carRemovalDto.getCpf());
         resident.getCars().forEach(car -> car.setOwnerId(null));
         resident.getCars().forEach(car -> car.setActivated(false));
         resident.getCars().clear();
@@ -92,20 +77,12 @@ public class CarController {
     @Transactional
     @DeleteMapping("/remove-car-by-license-plate")
     public ResponseEntity<Object> deleteCarFromResidentsByLicensePlate (@RequestBody @Valid CarRemovalDto carRemovalDto) {
-        Optional<Resident> residentOptional = residentService.findByCpf(carRemovalDto.getCpf());
-        if (residentOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Resident not found");
-        }
-        Optional<Car> carOptional = carService.findByLicensePlate(carRemovalDto.getLicensePlate());
-        if (carOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("License plate not found");
-        }
-        Resident resident = residentOptional.get();
-        Car carToRemove = carOptional.get();
-        carToRemove.setOwnerId(null);
-        carToRemove.setActivated(false);
-        resident.getCars().remove(carToRemove);
+        Resident resident = residentService.findByCpf(carRemovalDto.getCpf());
+        Car car = carService.findByLicensePlate(carRemovalDto.getLicensePlate());
+        car.setOwnerId(null);
+        car.setActivated(false);
+        resident.getCars().remove(car);
         residentService.add(resident);
-        return ResponseEntity.status(HttpStatus.OK).body(carService.add(carToRemove));
+        return ResponseEntity.status(HttpStatus.OK).body(carService.add(car));
     }
 }

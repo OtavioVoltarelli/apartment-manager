@@ -2,9 +2,7 @@ package com.apartment_manager.controllers;
 
 
 import com.apartment_manager.domain.Apartment;
-import com.apartment_manager.domain.Resident;
 import com.apartment_manager.dtos.ApartmentDto;
-import com.apartment_manager.dtos.ResidentRemovalDto;
 import com.apartment_manager.services.ApartmentService;
 import com.apartment_manager.services.ResidentService;
 import jakarta.transaction.Transactional;
@@ -42,22 +40,15 @@ public class ApartmentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> findById (Long id) {
-        Optional<Apartment> apartment = apartmentService.findById(id);
-        if(apartment.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Apartment not found");
-        }
+    public ResponseEntity<Object> findById (@PathVariable(value = "id")Long id) {
+        Apartment apartment = apartmentService.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(apartment);
     }
 
     @Transactional
     @PutMapping
     public ResponseEntity<Object> updateApartment(@RequestBody @Valid ApartmentDto apartmentDto) {
-        Optional<Apartment> apartmentOptional = apartmentService.findById(apartmentDto.getId());
-        if (apartmentOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Apartment not found");
-        }
-        Apartment apartment = apartmentOptional.get();
+        Apartment apartment = apartmentService.findById(apartmentDto.getId());
         apartment.setNumber(apartmentDto.getNumber());
         apartment.setId(apartmentDto.getId());
         return ResponseEntity.status(HttpStatus.OK).body(apartmentService.add(apartment));

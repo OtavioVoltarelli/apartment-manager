@@ -1,6 +1,7 @@
 package com.apartment_manager.services;
 
 import com.apartment_manager.domain.Car;
+import com.apartment_manager.exceptions.ObjectNotFoundException;
 import com.apartment_manager.repositories.CarRepository;
 import com.apartment_manager.repositories.ResidentRepository;
 import jakarta.transaction.Transactional;
@@ -28,8 +29,8 @@ public class CarService {
         return carRepository.findAll();
     }
 
-    public Optional<Car> findById(Long id) {
-        return carRepository.findById(id);
+    public Car findById(Long id) {
+        return carRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
     }
 
     @Transactional
@@ -37,7 +38,7 @@ public class CarService {
         carRepository.delete(car);
     }
 
-    public Optional<Car> findByLicensePlate(String licensePlate) {
-        return carRepository.findByLicensePlate(licensePlate);
+    public Car findByLicensePlate(String licensePlate) {
+        return carRepository.findByLicensePlate(licensePlate).orElseThrow(ObjectNotFoundException::new);
     }
 }

@@ -1,6 +1,7 @@
 package com.apartment_manager.services;
 
 import com.apartment_manager.domain.Resident;
+import com.apartment_manager.exceptions.ObjectNotFoundException;
 import com.apartment_manager.repositories.ResidentRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +26,12 @@ public class ResidentService {
         return residentRepository.findAll();
     }
 
-    public Optional<Resident> findById(Long id) {
-        return residentRepository.findById(id);
+    public Resident findById(Long id) {
+        return residentRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
     }
-    public Optional<Resident> findByCpf(String cpf) {
-        return residentRepository.findByCpf(cpf);
+
+    public Resident findByCpf(String cpf) {
+        return residentRepository.findByCpf(cpf).orElseThrow(ObjectNotFoundException::new);
     }
 
     @Transactional

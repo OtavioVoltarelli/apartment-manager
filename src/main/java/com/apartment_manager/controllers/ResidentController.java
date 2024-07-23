@@ -1,9 +1,7 @@
 package com.apartment_manager.controllers;
 
 import com.apartment_manager.domain.Apartment;
-import com.apartment_manager.domain.Car;
 import com.apartment_manager.domain.Resident;
-import com.apartment_manager.dtos.CarRemovalDto;
 import com.apartment_manager.dtos.ResidentRemovalDto;
 import com.apartment_manager.services.ApartmentService;
 import com.apartment_manager.services.CarService;
@@ -41,14 +39,10 @@ public class ResidentController {
         resident.setName(residentDto.getName());
         resident.setCpf(residentDto.getCpf());
         resident.setActivated(true);
-        Optional<Apartment> apartmentOptional = apartmentService.findByNumber(residentDto.getApartmentNumber());
-        if(apartmentOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Apartment not found");
-        }
-        var apartment = apartmentOptional.get();
+        Apartment apartment = apartmentService.findByNumber(residentDto.getApartmentNumber());
         apartment.setVacant(false);
         apartmentService.add(apartment);
-        resident.setApartment(apartmentOptional.get());
+        resident.setApartment(apartment);
         return ResponseEntity.status(HttpStatus.CREATED).body(residentService.add(resident));
     }
 
@@ -59,40 +53,27 @@ public class ResidentController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> findById (@PathVariable(value = "id") Long id) {
-        Optional<Resident> residentOptional = residentService.findById(id);
-        if(residentOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Resident not found");
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(residentOptional);
+        Resident resident = residentService.findById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(resident);
     }
 
     @Transactional
     @PutMapping
     public ResponseEntity<Object> update (@RequestBody @Valid ResidentDto residentDto) {
-        Optional<Resident> residentOptional = residentService.findById(residentDto.getId());
-        if(residentOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Resident not found");
-        }
-        Optional<Apartment> newApartmentOptional = apartmentService.findByNumber(residentDto.getApartmentNumber());
-        if(newApartmentOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Apartment not found");
-        }
-        Resident resident = residentOptional.get();
-        Apartment newApartment = newApartmentOptional.get();
+        Resident resident = residentService.findById(residentDto.getId());
+        Apartment newApartment = apartmentService.findByNumber(residentDto.getApartmentNumber());
         Apartment oldApartment = resident.getApartment();
 
-        resident.setId(residentOptional.get().getId());
         resident.setCpf(residentDto.getCpf());
         resident.setName(residentDto.getName());
-        resident.setApartment(newApartmentOptional.get());
 
         if(newApartment.getNumber() != oldApartment.getNumber()) {
+            resident.setApartment(newApartment);
             oldApartment.getResidents().clear();
             oldApartment.setVacant(true);
             apartmentService.add(oldApartment);
             newApartment.setVacant(false);
         }
-
         return ResponseEntity.status(HttpStatus.OK).body(residentService.add(resident));
     }
 
@@ -100,11 +81,7 @@ public class ResidentController {
     @Transactional
     @DeleteMapping("/remove-all-residents")
     public ResponseEntity<Object> deleteAllResidentsFromApartment (@RequestBody @Valid ResidentRemovalDto residentRemovalDto) {
-        Optional<Apartment> apartmentOptional = apartmentService.findByNumber(residentRemovalDto.getApartmentNumber());
-        if (apartmentOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Apartment not found");
-        }
-        Apartment apartment = apartmentOptional.get();
+        Apartment apartment = apartmentService.findByNumber(residentRemovalDto.getApartmentNumber());
         apartment.getResidents().forEach(resident -> resident.setApartment(null));
         apartment.getResidents().forEach(resident -> resident.setActivated(false));
         apartment.getResidents().clear();
@@ -116,19 +93,11 @@ public class ResidentController {
     @Transactional
     @DeleteMapping("/remove-residents-by-cpf")
     public ResponseEntity<Object> deleteResidentsFromApartmentByCpf(@RequestBody @Valid ResidentRemovalDto residentRemovalDto) {
-        Optional<Apartment> apartmentOptional = apartmentService.findByNumber(residentRemovalDto.getApartmentNumber());
-        if (apartmentOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Apartment not found");
-        }
-        Optional<Resident> residentOptional = residentService.findByCpf(residentRemovalDto.getResidentCpf());
-        if (residentOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cpf not found");
-        }
-        Apartment apartment = apartmentOptional.get();
-        Resident residentToRemove = residentOptional.get();
-        residentToRemove.setApartment(null);
-        residentToRemove.setActivated(false);
-        apartment.getResidents().remove(residentToRemove);
+        Apartment apartment = apartmentService.findByNumber(residentRemovalDto.getApartmentNumber());
+        Resident resident = residentService.findByCpf(residentRemovalDto.getResidentCpf());
+        resident.setApartment(null);
+        resident.setActivated(false);
+        apartment.getResidents().remove(resident);
         if (apartment.getResidents().isEmpty()) {
             apartment.setVacant(true);
         }

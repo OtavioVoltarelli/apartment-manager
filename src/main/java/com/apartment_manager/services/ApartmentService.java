@@ -1,6 +1,7 @@
 package com.apartment_manager.services;
 
 import com.apartment_manager.domain.Apartment;
+import com.apartment_manager.exceptions.ObjectNotFoundException;
 import com.apartment_manager.repositories.ApartmentRepository;
 import com.apartment_manager.repositories.ResidentRepository;
 import jakarta.transaction.Transactional;
@@ -29,12 +30,12 @@ public class ApartmentService {
         return apartmentRepository.findAll();
     }
 
-    public Optional<Apartment> findById(Long id) {
-        return apartmentRepository.findById(id);
+    public Apartment findById(Long id) {
+        return apartmentRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
     }
 
-    public Optional<Apartment> findByNumber(Long number) {
-        return apartmentRepository.findByNumber(number);
+    public Apartment findByNumber(Long number) {
+        return apartmentRepository.findByNumber(number).orElseThrow(ObjectNotFoundException::new);
     }
 
     @Transactional
