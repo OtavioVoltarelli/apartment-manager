@@ -65,6 +65,12 @@ public class ResidentController {
         resident.setCpf(residentDto.getCpf());
         resident.setName(residentDto.getName());
 
+        if(oldApartment == null) {
+            oldApartment = newApartment;
+            resident.setApartment(oldApartment);
+            resident.setActivated(true);
+        }
+
         if(newApartment.getNumber() != oldApartment.getNumber()) {
             resident.setApartment(newApartment);
             oldApartment.getResidents().clear();
@@ -84,6 +90,7 @@ public class ResidentController {
         apartment.getResidents().forEach(resident -> resident.setActivated(false));
         apartment.getResidents().clear();
         apartment.setVacant(true);
+        apartment.getResidents().forEach(resident -> resident.getCars().forEach(car -> car.setActivated(false)));
         apartmentService.add(apartment);
         return ResponseEntity.status(HttpStatus.OK).body(apartmentService.add(apartment));
     }
@@ -95,6 +102,7 @@ public class ResidentController {
         Resident resident = residentService.findByCpf(residentRemovalDto.getResidentCpf());
         resident.setApartment(null);
         resident.setActivated(false);
+        resident.getCars().forEach(car -> car.setActivated(false));
         apartment.getResidents().remove(resident);
         if (apartment.getResidents().isEmpty()) {
             apartment.setVacant(true);
