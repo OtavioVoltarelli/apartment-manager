@@ -6,9 +6,8 @@ import com.apartment_manager.repositories.ResidentRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class ResidentService {
@@ -27,12 +26,13 @@ public class ResidentService {
     }
 
     public Resident findById(Long id) {
-        return residentRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
+        return residentRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Resident with id " + id + " not found"));
     }
 
     public Resident findByCpf(String cpf) {
-        return residentRepository.findByCpf(cpf).orElseThrow(ObjectNotFoundException::new);
+        return residentRepository.findByCpf(cpf).orElseThrow(() -> new ObjectNotFoundException("Resident with cpf " + cpf + " not found"));
     }
+
 
     @Transactional
     public void delete(Resident resident) {

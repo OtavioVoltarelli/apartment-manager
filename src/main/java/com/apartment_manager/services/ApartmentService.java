@@ -7,9 +7,8 @@ import com.apartment_manager.repositories.ResidentRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class ApartmentService {
@@ -31,12 +30,14 @@ public class ApartmentService {
     }
 
     public Apartment findById(Long id) {
-        return apartmentRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
+        return apartmentRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Apartment with id " + id + " not found"));
     }
 
+
     public Apartment findByNumber(Long number) {
-        return apartmentRepository.findByNumber(number).orElseThrow(ObjectNotFoundException::new);
+        return apartmentRepository.findByNumber(number).orElseThrow(() -> new ObjectNotFoundException("Apartment with number " + number + " not found"));
     }
+
 
     @Transactional
     public void delete(Apartment apartment) {

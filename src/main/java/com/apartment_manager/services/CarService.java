@@ -7,9 +7,8 @@ import com.apartment_manager.repositories.ResidentRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class CarService {
@@ -30,8 +29,9 @@ public class CarService {
     }
 
     public Car findById(Long id) {
-        return carRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
+        return carRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Car with id " + id + " not found"));
     }
+
 
     @Transactional
     public void delete(Car car) {
@@ -39,6 +39,7 @@ public class CarService {
     }
 
     public Car findByLicensePlate(String licensePlate) {
-        return carRepository.findByLicensePlate(licensePlate).orElseThrow(ObjectNotFoundException::new);
+        return carRepository.findByLicensePlate(licensePlate).orElseThrow(() -> new ObjectNotFoundException("Car with license plate " + licensePlate + " not found"));
     }
+
 }

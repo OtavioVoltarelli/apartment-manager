@@ -1,22 +1,18 @@
 package com.apartment_manager.infra;
 
-
 import com.apartment_manager.exceptions.ObjectNotFoundException;
-
-import org.hibernate.NonUniqueResultException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
 import java.sql.SQLIntegrityConstraintViolationException;
 
+
+
 @RestControllerAdvice
-public class RestExceptionHandler extends ResponseEntityExceptionHandler {
+public class RestExceptionHandler {
 
     @ExceptionHandler(ObjectNotFoundException.class)
     private ResponseEntity<RestErrorMessage> objectNotFound(ObjectNotFoundException ex) {
@@ -29,5 +25,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<RestErrorMessage> handleSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException ex) {
         RestErrorMessage restErrorMessage = new RestErrorMessage(HttpStatus.CONFLICT, ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(restErrorMessage);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<RestErrorMessage> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
+        String errorMessage = "Invalid request body. Please check the format of the input.";
+        RestErrorMessage restErrorMessage = new RestErrorMessage(HttpStatus.BAD_REQUEST, errorMessage);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(restErrorMessage);
     }
 }
